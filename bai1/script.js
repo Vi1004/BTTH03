@@ -17,6 +17,7 @@ const studentTableBody = document.getElementById("studentTableBody");
 
 // DATA
 let students = [];
+let editIndex = null;
 
 // DOM ELEMENTS
 const openFormBtn = document.getElementById("openFormBtn");
@@ -32,6 +33,12 @@ const messageBox = document.getElementById("messageBox");
 
 // MỞ POPUP
 openFormBtn.addEventListener("click", function () {
+
+    resetForm();
+
+    editIndex = null;
+
+    formTitle.innerText = "Thêm Sinh Viên";
 
     studentModal.classList.remove("hidden");
 
@@ -81,7 +88,24 @@ studentForm.addEventListener("submit", function (event) {
     };
 
     // Thêm vào mảng
-    students.push(student);
+    if (editIndex === null) {
+
+        students.push(student);
+
+        showMessage("Thêm sinh viên thành công");
+
+    }
+
+    // SỬA
+    else {
+
+        students[editIndex] = student;
+
+        showMessage("Cập nhật sinh viên thành công");
+
+        editIndex = null;
+
+    }
 
     // Render lại bảng
     renderStudents();
@@ -91,10 +115,6 @@ studentForm.addEventListener("submit", function (event) {
 
     // Đóng popup
     studentModal.classList.add("hidden");
-
-    // Thông báo
-    showMessage("Thêm sinh viên thành công");
-
 });
 
 // RENDER TABLE
@@ -102,7 +122,8 @@ function renderStudents() {
 
     let html = "";
 
-    students.forEach(function (student) {
+
+    students.forEach(function (student, index) {
 
         html += `
             <tr>
@@ -120,9 +141,15 @@ function renderStudents() {
                 <td>${student.email}</td>
 
                 <td>
-                    <button>Sửa</button>
 
-                    <button>Xóa</button>
+                    <button onclick="editStudent(${index})">
+                        Sửa
+                    </button>
+
+                    <button onclick="deleteStudent(${index})">
+                        Xóa
+                    </button>
+
                 </td>
 
             </tr>
@@ -140,5 +167,115 @@ function renderStudents() {
 function resetForm() {
 
     studentForm.reset();
+
+}
+
+function editStudent(index) {
+
+    // Lấy sinh viên cần sửa
+
+    const student = students[index];
+
+
+    // Đưa dữ liệu lên form
+
+    studentIdInput.value = student.id;
+
+    fullNameInput.value = student.fullName;
+
+    birthDateInput.value = student.birthDate;
+
+    classNameInput.value = student.className;
+
+    scoreInput.value = student.score;
+
+    emailInput.value = student.email;
+
+
+    // Đánh dấu đang sửa
+
+    editIndex = index;
+
+
+    // Đổi tiêu đề form
+
+    formTitle.innerText = "Cập Nhật Sinh Viên";
+
+
+    // Hiện popup
+
+    studentModal.classList.remove("hidden");
+
+}
+
+function editStudent(index) {
+
+    // Lấy sinh viên cần sửa
+
+    const student = students[index];
+
+
+    // Đưa dữ liệu lên form
+
+    studentIdInput.value = student.id;
+
+    fullNameInput.value = student.fullName;
+
+    birthDateInput.value = student.birthDate;
+
+    classNameInput.value = student.className;
+
+    scoreInput.value = student.score;
+
+    emailInput.value = student.email;
+
+
+    // Đánh dấu đang sửa
+
+    editIndex = index;
+
+
+    // Đổi tiêu đề form
+
+    formTitle.innerText = "Cập Nhật Sinh Viên";
+
+
+    // Hiện popup
+
+    studentModal.classList.remove("hidden");
+
+}
+
+function deleteStudent(index) {
+
+    // Hỏi xác nhận
+
+    const confirmDelete = confirm(
+        "Bạn có chắc muốn xóa sinh viên này?"
+    );
+
+
+    // Nếu không đồng ý
+
+    if (!confirmDelete) {
+
+        return;
+
+    }
+
+
+    // Xóa khỏi mảng
+
+    students.splice(index, 1);
+
+
+    // Render lại bảng
+
+    renderStudents();
+
+
+    // Thông báo
+
+    showMessage("Xóa sinh viên thành công");
 
 }
