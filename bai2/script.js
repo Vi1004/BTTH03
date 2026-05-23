@@ -81,12 +81,9 @@ const taskList =
 // =======================
 
 let tasks = [];
+let editIndex = null;
 
-
-// =======================
 // SUBMIT FORM
-// =======================
-
 taskForm.addEventListener("submit", function (event) {
 
     event.preventDefault();
@@ -106,8 +103,29 @@ taskForm.addEventListener("submit", function (event) {
 
     };
 
+    // THÊM
 
-    tasks.push(task);
+    if (editIndex === null) {
+
+        tasks.push(task);
+
+        showMessage("Thêm công việc thành công");
+
+    }
+
+    // SỬA
+
+    else {
+
+        task.completed = tasks[editIndex].completed;
+
+        tasks[editIndex] = task;
+
+        editIndex = null;
+
+        showMessage("Cập nhật công việc thành công");
+
+    }
 
 
     renderTasks();
@@ -116,15 +134,9 @@ taskForm.addEventListener("submit", function (event) {
 
     taskModal.classList.add("hidden");
 
-    showMessage("Thêm công việc thành công");
-
 });
 
-
-// =======================
 // RENDER TASKS
-// =======================
-
 function renderTasks() {
 
     if (tasks.length === 0) {
@@ -140,7 +152,7 @@ function renderTasks() {
     let html = "";
 
 
-    tasks.forEach(function (task) {
+    tasks.forEach(function (task, index) {
 
         html += `
             <div class="task-card">
@@ -160,9 +172,21 @@ function renderTasks() {
                         : "Chưa hoàn thành"}
                 </p>
 
-                <button>Sửa</button>
+                <button onclick="editTask(${index})">
+                    Sửa
+                </button>
 
-                <button>Xóa</button>
+                <button onclick="deleteTask(${index})">
+                    Xóa
+                </button>
+
+                <button onclick="toggleTask(${index})">
+
+                    ${task.completed
+                        ? "Bỏ hoàn thành"
+                        : "Hoàn thành"}
+
+                </button>
 
             </div>
         `;
@@ -173,13 +197,66 @@ function renderTasks() {
 
 }
 
-
-// =======================
 // RESET FORM
-// =======================
-
 function resetForm() {
 
     taskForm.reset();
+
+}
+
+//Hàm sửa
+function editTask(index) {
+
+    const task = tasks[index];
+
+
+    titleInput.value = task.title;
+
+    descriptionInput.value = task.description;
+
+    deadlineInput.value = task.deadline;
+
+    priorityInput.value = task.priority;
+
+
+    editIndex = index;
+
+    formTitle.innerText = "Cập Nhật Công Việc";
+
+    taskModal.classList.remove("hidden");
+
+}
+
+// Hàm xóa
+function deleteTask(index) {
+
+    const confirmDelete = confirm(
+        "Bạn có chắc muốn xóa?"
+    );
+
+
+    if (!confirmDelete) {
+
+        return;
+
+    }
+
+
+    tasks.splice(index, 1);
+
+    renderTasks();
+
+    showMessage("Xóa công việc thành công");
+
+}
+
+// Hàm đổi trạng thái
+function toggleTask(index) {
+
+    tasks[index].completed =
+        !tasks[index].completed;
+
+
+    renderTasks();
 
 }
