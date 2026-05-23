@@ -16,7 +16,9 @@ const studentForm = document.getElementById("studentForm");
 const studentTableBody = document.getElementById("studentTableBody");
 
 // DATA
-let students = [];
+let students = JSON.parse(
+    localStorage.getItem("students")
+) || [];
 let editIndex = null;
 
 // DOM ELEMENTS
@@ -30,6 +32,9 @@ const formTitle = document.getElementById("formTitle");
 
 const messageBox = document.getElementById("messageBox");
 
+const totalStudents = document.getElementById("totalStudents");
+
+const averageScore = document.getElementById("averageScore");
 
 // MỞ POPUP
 openFormBtn.addEventListener("click", function () {
@@ -62,6 +67,12 @@ function showMessage(message) {
 
     messageBox.innerText = message;
 
+    setTimeout(function () {
+
+        messageBox.innerText = "";
+
+    }, 3000);
+
 }
 
 // SUBMIT FORM
@@ -91,6 +102,7 @@ studentForm.addEventListener("submit", function (event) {
     if (editIndex === null) {
 
         students.push(student);
+        saveStudents();
 
         showMessage("Thêm sinh viên thành công");
 
@@ -100,6 +112,7 @@ studentForm.addEventListener("submit", function (event) {
     else {
 
         students[editIndex] = student;
+        saveStudents();
 
         showMessage("Cập nhật sinh viên thành công");
 
@@ -109,6 +122,7 @@ studentForm.addEventListener("submit", function (event) {
 
     // Render lại bảng
     renderStudents();
+    updateStatistics();
 
     // Reset form
     resetForm();
@@ -119,9 +133,23 @@ studentForm.addEventListener("submit", function (event) {
 
 // RENDER TABLE
 function renderStudents() {
+    // Nếu chưa có dữ liệu
+
+    if (students.length === 0) {
+
+        studentTableBody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    Chưa có sinh viên nào
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
 
     let html = "";
-
 
     students.forEach(function (student, index) {
 
@@ -267,11 +295,13 @@ function deleteStudent(index) {
     // Xóa khỏi mảng
 
     students.splice(index, 1);
+    saveStudents();
 
 
     // Render lại bảng
 
     renderStudents();
+    updateStatistics();
 
 
     // Thông báo
@@ -279,3 +309,53 @@ function deleteStudent(index) {
     showMessage("Xóa sinh viên thành công");
 
 }
+
+// SAVE LOCAL STORAGE
+function saveStudents() {
+
+    localStorage.setItem(
+        "students",
+        JSON.stringify(students)
+    );
+
+}
+
+// UPDATE STATISTICS
+
+function updateStatistics() {
+
+    // Tổng sinh viên
+
+    totalStudents.innerText = students.length;
+
+
+    // Tính điểm trung bình
+
+    let totalScore = 0;
+
+
+    students.forEach(function (student) {
+
+        totalScore += Number(student.score);
+
+    });
+
+
+    let average = 0;
+
+
+    if (students.length > 0) {
+
+        average = totalScore / students.length;
+
+    }
+
+
+    averageScore.innerText = average.toFixed(2);
+
+}
+
+// LOAD PAGE
+renderStudents();
+
+updateStatistics();

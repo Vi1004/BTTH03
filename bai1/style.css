@@ -23,7 +23,7 @@ header {
 header button {
     padding: 10px 16px;
     border: none;
-    background: #007bff;
+    background: #efbfe4;
     color: white;
     border-radius: 6px;
     cursor: pointer;
@@ -54,7 +54,7 @@ td {
 }
 
 th {
-    background: #007bff;
+    background: #efbfe4;
     color: white;
 }
 
@@ -114,9 +114,9 @@ th {
 
     padding: 12px;
 
-    background: #d4edda;
+    background: #f3f499;
 
-    color: #155724;
+    color: #30200afb;
 
     border-radius: 6px;
 }
