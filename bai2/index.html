@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Công Việc</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <h1>Quản Lý Công Việc</h1>
+
+        <button id="openFormBtn">
+            + Thêm Công Việc
+        </button>
+
+    </header>
+
+
+    <!-- THỐNG KÊ -->
+    <section class="statistics">
+
+        <div>
+            Tổng công việc:
+            <span id="totalTasks">0</span>
+        </div>
+
+        <div>
+            Hoàn thành:
+            <span id="completedTasks">0</span>
+        </div>
+
+        <div>
+            Chưa hoàn thành:
+            <span id="pendingTasks">0</span>
+        </div>
+
+    </section>
+
+
+    <!-- MESSAGE -->
+    <div id="messageBox"></div>
+
+
+    <!-- TASK LIST -->
+    <section id="taskList">
+
+        <!-- Render bằng JS -->
+
+    </section>
+
+
+    <!-- MODAL -->
+    <div class="modal hidden" id="taskModal">
+
+        <div class="modal-content">
+
+            <h2 id="formTitle">
+                Thêm Công Việc
+            </h2>
+
+            <form id="taskForm">
+
+                <input
+                    type="text"
+                    id="title"
+                    placeholder="Tiêu đề công việc"
+                >
+
+                <textarea
+                    id="description"
+                    placeholder="Mô tả"
+                ></textarea>
+
+                <input
+                    type="date"
+                    id="deadline"
+                >
+
+                <select id="priority">
+
+                    <option value="Thấp">Thấp</option>
+
+                    <option value="Trung Bình">
+                        Trung Bình
+                    </option>
+
+                    <option value="Cao">Cao</option>
+
+                </select>
+
+
+                <div class="form-buttons">
+
+                    <button type="submit">
+                        Lưu
+                    </button>
+
+                    <button
+                        type="button"
+                        id="closeFormBtn"
+                    >
+                        Hủy
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
