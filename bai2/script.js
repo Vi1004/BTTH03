@@ -1,7 +1,4 @@
-// =======================
 // DOM ELEMENTS
-// =======================
-
 const openFormBtn = document.getElementById("openFormBtn");
 
 const closeFormBtn = document.getElementById("closeFormBtn");
@@ -12,52 +9,34 @@ const formTitle = document.getElementById("formTitle");
 
 const messageBox = document.getElementById("messageBox");
 
-
-// =======================
 // OPEN MODAL
-// =======================
-
 openFormBtn.addEventListener("click", function () {
 
     taskModal.classList.remove("hidden");
 
 });
 
-
-// =======================
 // CLOSE MODAL
-// =======================
-
 closeFormBtn.addEventListener("click", function () {
 
     taskModal.classList.add("hidden");
 
 });
 
-
-// =======================
 // TEST DOM
-// =======================
-
 formTitle.innerText = "Form Công Việc";
 
 messageBox.innerText = "Ứng dụng đã sẵn sàng";
 
 
-// =======================
 // SHOW MESSAGE
-// =======================
-
 function showMessage(message) {
 
     messageBox.innerText = message;
 
 }
 
-// =======================
 // INPUTS
-// =======================
-
 const titleInput = document.getElementById("title");
 
 const descriptionInput =
@@ -80,7 +59,9 @@ const taskList =
 // DATA
 // =======================
 
-let tasks = [];
+let tasks = JSON.parse(
+    localStorage.getItem("tasks")
+) || [];
 let editIndex = null;
 
 // SUBMIT FORM
@@ -108,6 +89,7 @@ taskForm.addEventListener("submit", function (event) {
     if (editIndex === null) {
 
         tasks.push(task);
+        saveTasks();
 
         showMessage("Thêm công việc thành công");
 
@@ -120,6 +102,7 @@ taskForm.addEventListener("submit", function (event) {
         task.completed = tasks[editIndex].completed;
 
         tasks[editIndex] = task;
+        saveTasks();
 
         editIndex = null;
 
@@ -129,6 +112,7 @@ taskForm.addEventListener("submit", function (event) {
 
 
     renderTasks();
+    updateStatistics();
 
     resetForm();
 
@@ -243,8 +227,10 @@ function deleteTask(index) {
 
 
     tasks.splice(index, 1);
+    saveTasks();
 
     renderTasks();
+    updateStatistics();
 
     showMessage("Xóa công việc thành công");
 
@@ -255,8 +241,56 @@ function toggleTask(index) {
 
     tasks[index].completed =
         !tasks[index].completed;
-
+    saveTasks();
 
     renderTasks();
+    updateStatistics();
+
+}
+
+//DOM thống kê
+const totalTasks =
+    document.getElementById("totalTasks");
+
+const completedTasks =
+    document.getElementById("completedTasks");
+
+const pendingTasks =
+    document.getElementById("pendingTasks");
+
+// save local storage
+function saveTasks() {
+
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
+
+}
+
+// update statistics
+function updateStatistics() {
+
+    totalTasks.innerText = tasks.length;
+
+
+    let completed = 0;
+
+
+    tasks.forEach(function (task) {
+
+        if (task.completed) {
+
+            completed++;
+
+        }
+
+    });
+
+
+    completedTasks.innerText = completed;
+
+    pendingTasks.innerText =
+        tasks.length - completed;
 
 }
