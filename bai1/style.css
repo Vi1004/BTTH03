@@ -107,3 +107,16 @@ th {
     flex: 1;
     padding: 10px;
 }
+
+/*Thêm CSS cho thông báo*/
+#messageBox {
+    margin-bottom: 20px;
+
+    padding: 12px;
+
+    background: #d4edda;
+
+    color: #155724;
+
+    border-radius: 6px;
+}
